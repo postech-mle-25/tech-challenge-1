@@ -1,29 +1,17 @@
 from datetime import datetime, timedelta
 from typing import Annotated
-from pydantic import BaseModel
-from sqlalchemy.orm import Session
-from sqlalchemy.testing.pickleable import User
 
-from starlette import status
-from passlib.context import CryptContext
-from jose import jwt, JWTError
 from fastapi import Depends, HTTPException, APIRouter
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from jose import jwt, JWTError
+from passlib.context import CryptContext
+from pydantic import BaseModel
+from sqlalchemy.orm import Session
+from starlette import status
+
 from db import get_session
 from model.users import User
-
-router = APIRouter(
-    prefix="/auth",
-    tags=["auth"],
-    responses={404: {"description": "Not found"}},
-)
-
-SECRET_KEY = "123"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
-
-bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-oauth2bearer = OAuth2PasswordBearer(tokenUrl="auth/token")
+import constants
 
 class CreateUserRequest(BaseModel):
     username: str
@@ -32,6 +20,15 @@ class CreateUserRequest(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+
+router = APIRouter(
+    prefix="/auth",
+    tags=["auth"],
+    responses={404: {"description": "Not found"}},
+)
+
+bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+oauth2bearer = OAuth2PasswordBearer(tokenUrl="auth/token")
 
 db_dependency = Annotated[Session, Depends(get_session)]
 
@@ -58,7 +55,8 @@ async def login_for_access_token(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    token = create_access_token(user.username, user.id, timedelta(minutes=30))
+    token = create_access_token(user.username, user.id,
+                                timedelta(minutes=constants.JWTSettings.ACCESS_TOKEN_EXPIRE_MINUTES))
 
     return {"access_token": token, "token_type": "bearer"}
 
@@ -74,12 +72,12 @@ def create_access_token(username: str, user_id: int, expires_delta: timedelta):
     to_encode = {"sub": username, "id": user_id}
     expire = datetime.now() + expires_delta
     to_encode.update({"exp": int(expire.timestamp())})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, constants.JWTSettings.SECRET_KEY, algorithm=constants.JWTSettings.ALGORITHM)
     return encoded_jwt
 
 async def get_current_user(token: Annotated[str, Depends(oauth2bearer)]):
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token, constants.JWTSettings.SECRET_KEY, algorithms=[constants.JWTSettings.ALGORITHM])
         username: str = payload.get("sub")
         user_id: int = payload.get("id")
         if username is None or user_id is None:
