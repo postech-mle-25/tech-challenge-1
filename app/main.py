@@ -2,8 +2,8 @@ from typing import Annotated
 
 from fastapi import Depends, FastAPI
 from sqlmodel import  Session
-from db import get_session, create_db_and_tables
-from routers import processamento
+from app.db import get_session, create_db_and_tables
+from app.routers.ingestion import router as ingestion_router
 
 
 SessionDep = Annotated[Session, Depends(get_session)]
@@ -20,7 +20,9 @@ def on_startup():
 # app.include_router(exportacao.router)
 # app.include_router(importacao.router)
 # app.include_router(geral.router)
-app.include_router(processamento.router)
+# app.include_router(processamento.router)
+app.include_router(ingestion_router, prefix = '/api')
+
 # app.include_router(
 #     admin.router,
 #     prefix="/admin",
