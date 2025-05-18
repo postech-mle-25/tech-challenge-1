@@ -4,8 +4,8 @@ from typing import Annotated
 
 from fastapi import Depends, FastAPI
 from sqlmodel import  Session
-from db import get_session, create_db_and_tables
-from routers import processamento
+from app.db import get_session, create_db_and_tables
+from app.routers.ingestion import router as ingestion_router
 
 import auth
 from auth import db_dependency, user_dependency
@@ -24,8 +24,7 @@ app = FastAPI(lifespan=lifespan)
 # app.include_router(exportacao.router)
 # app.include_router(importacao.router)
 # app.include_router(geral.router)
-app.include_router(processamento.router)
-app.include_router(auth.router)
+# app.include_router(processamento.router)
 # app.include_router(
 #     admin.router,
 #     prefix="/admin",
@@ -33,6 +32,10 @@ app.include_router(auth.router)
 #     #dependencies=[Depends(get_token_header)],
 #     responses={418: {"description": "I'm a teapot"}},
 # )
+
+app.include_router(ingestion_router, prefix = '/api')
+app.include_router(processamento.router)
+app.include_router(auth.router)
 
 @app.get("/")
 async def root(user: user_dependency, db: db_dependency):

@@ -4,7 +4,7 @@ from typing import List
 from db import get_session
 from fastapi import APIRouter, Depends
 from model.base_queries import *
-from model.mercado import Comercio
+from model.tables import Comercio
 
 router = APIRouter(
     prefix="/comercio",
@@ -44,3 +44,8 @@ def get_comercio_por_periodo(
     apos: int, ate: int, session=Depends(get_session)
 ) -> List[Comercio]:
     return filter_by_period(ate, apos, Comercio.ano, Comercio, session)
+
+
+@router.get("/{tipo}")
+def get_comercio_por_tipo(tipo: str, session=Depends(get_session)) -> List[Comercio]:
+    return get_by_field(tipo, Comercio.tipo, Comercio, session)
