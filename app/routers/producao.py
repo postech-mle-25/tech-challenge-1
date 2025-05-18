@@ -4,7 +4,7 @@ from typing import List
 from db import get_session
 from fastapi import APIRouter, Depends
 from model.base_queries import create_item, delete_item, filter_by_period, get_by_field, get_item, update_item
-from model.mercado import Producao
+from model.tables import Producao
 
 router = APIRouter(
     prefix="/producao",
@@ -27,6 +27,11 @@ def update_producao(producao: Producao, session=Depends(get_session)) -> Produca
 @router.get("/obter/{item_id}")
 def get_producao(item_id: int, session=Depends(get_session)) -> Producao:
     return get_item(item_id, Producao, session)
+
+
+@router.get("/{tipo}")
+def get_producao_por_tipo(tipo: str, session=Depends(get_session)) -> List[Producao]:
+    return get_by_field(tipo, Producao.tipo, Producao, session)
 
 
 @router.delete("/excluir/{item_id}")
