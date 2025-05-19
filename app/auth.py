@@ -9,9 +9,9 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from starlette import status
 
-from db import get_session
-from model.users import User
-import constants
+from app.db import get_session
+from app.model.users import User
+from app import constants
 
 class CreateUserRequest(BaseModel):
     username: str
@@ -93,4 +93,4 @@ async def get_current_user(token: Annotated[str, Depends(oauth2bearer)]):
             detail="User not authenticated. Could not validate credentials."
         )
 
-user_dependency = Annotated[User, Depends(get_current_user)]
+user_dependency = Annotated[dict, Depends(get_current_user)]
