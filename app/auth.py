@@ -93,4 +93,4 @@ async def get_current_user(token: Annotated[str, Depends(oauth2bearer)]):
             detail="User not authenticated. Could not validate credentials."
         )
 
-user_dependency = Annotated[dict, Depends(get_current_user)]
+user_dependency = Annotated[User, Depends(get_current_user)]
