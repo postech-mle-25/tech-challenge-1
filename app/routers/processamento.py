@@ -1,15 +1,15 @@
 from typing import List
 
-# from .dependencies import get_token_header
-from db import get_session
+from app.auth import get_current_user
+from app.db import get_session
 from fastapi import APIRouter, Depends
-from model.base_queries import create_item, delete_item, filter_by_period, get_by_field, get_item, update_item
-from model.tables import Processamento
+from app.model.base_queries import create_item, delete_item, filter_by_period, get_by_field, get_item, update_item
+from app.model.tables import Processamento
 
 router = APIRouter(
     prefix="/processamento",
     tags=["processamento"],
-    # dependencies=[Depends(get_token_header)],
+    dependencies=[Depends(get_current_user)],
     responses={404: {"description": "Not found"}},
 )
 
