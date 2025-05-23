@@ -22,7 +22,11 @@ def db_ingestion():
                     df = df[df[coluna].astype(str).str.lower() != 'none']
 
             # Transforma cada linha em um objeto da classe Modelo
-            registros = [Modelo(**row) for row in df.to_dict(orient="records")]
+            registros = [
+                Modelo(**row)
+                for row in df.to_dict(orient="records")
+                if all(row.get(col) is not None for col in constants.DB.INDEX_COLUMNS)
+            ]
 
             # Insere no banco
             session.add_all(registros)
