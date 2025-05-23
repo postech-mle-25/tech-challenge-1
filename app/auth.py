@@ -9,9 +9,9 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from starlette import status
 
-from db import get_session
-from model.users import User
-import constants
+from app.db import get_session
+from app.model.users import User
+from app import constants
 
 class CreateUserRequest(BaseModel):
     username: str
