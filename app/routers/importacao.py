@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends
 from app.model.base_queries import create_item, delete_item, get_by_field, get_item, update_item
 from app.model.tables import Importa
 
+
 router = APIRouter(
     prefix="/importacao",
     tags=["importacao"],
