@@ -22,7 +22,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 SessionDep = Annotated[Session, Depends(get_session)]
 app.include_router(ingestion_router, prefix = '/api')
-app.include_router(processamento.router)
+app.include_router(processamento.router, prefix = '/api')
 app.include_router(auth.router)
 
 app.include_router(comercio.router, prefix='/api')
