@@ -5,27 +5,27 @@ from tests import constants
 
 @pytest.fixture(scope="module")
 def token():
-    url: str = f"{constants.Authentication.url}/auth/token"
-    headers: dict = {"accept": "application/json", "Content-Type": "application/x-www-form-urlencoded"}
+    url = f"{constants.Authentication.url}/auth/token"
+    headers = {"accept": "application/json", "Content-Type": "application/x-www-form-urlencoded"}
     data = {
         'username': constants.Authentication.username,
         'password': constants.Authentication.password,
     }
 
-    response: Response = requests.post(url, headers=headers, data=data)
+    response = requests.post(url, headers=headers, data=data)
 
     assert response.status_code == 200
     return response.json()["access_token"]
 
-def base_endpoint_criar_test(token, endpoint: str, data: dict):
-    url: str = f"{constants.Authentication.url}/api/{endpoint}/criar/"
-    headers: dict = {
+def base_test_endpoints_criar(token, endpoint: str, data: dict):
+    url = f"{constants.Authentication.url}/api/{endpoint}/criar/"
+    headers = {
         "accept": "application/json",
         "Content-Type": "application/json",
         "Authorization": f"Bearer {token}"
         }
 
-    response: Response = requests.post(url, headers=headers, json=data)
+    response = requests.post(url, headers=headers, json=data)
     assert response.status_code == 200
     assert 'id' in response.json().keys()
     assert isinstance(response.json()["id"], int)
@@ -67,9 +67,16 @@ def base_endpoint_criar_test(token, endpoint: str, data: dict):
                 "quantidade": 1,
                 "valor": 300
             }),
+            ("producao", {
+                "control": "VINHO DE MESA",
+                "arquivo": "Producao.csv",
+                "pasta": "producao",
+                "ano": 1977,
+                "quantidade": 1,
+            })
         ],
-        ids=["processamento", "comercio", "exportacao", "importacao"]
+        ids=["processamento", "comercio", "exportacao", "importacao", "producao"]
     )
 
-def test_criacao_endpoint(token, endpoint, data):
-    base_endpoint_criar_test(token, endpoint, data)
+def test_endpoints_criar(token, endpoint, data):
+    base_test_endpoints_criar(token, endpoint, data)
