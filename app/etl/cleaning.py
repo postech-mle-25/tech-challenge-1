@@ -6,6 +6,9 @@ import requests
 from io import StringIO
 import re
 
+#TODO: remover importações desnecessárias
+#TODO: adicionar type hints
+
 def detectar_separador(url):
     """Identifica o separador usado em cada CSV."""
     response = requests.get(url)
