@@ -1,14 +1,16 @@
 import requests
 from requests import Response
+from tests import constants
 
 def test_root_unauthenticated():
-    response = requests.get("http://127.0.0.1:8000/")
+    response = requests.get(constants.Authentication.url + "/")
     assert response.status_code == 401
 
 def test_create_new_generic_user():
-    url: str = "http://127.0.0.1:8000/auth"
+    url: str = f"{constants.Authentication.url}/auth"
     headers: dict = {"accept": "application/json", "Content-Type": "application/json"}
-    data: dict = {"username": "bruno","password": "test123"}
+    data: dict = {"username": constants.Authentication.username,
+                  "password": constants.Authentication.password}
 
     response: Response = requests.post(url, headers=headers, json=data)
 
@@ -24,16 +26,10 @@ def test_create_new_generic_user():
     assert isinstance(response_json["hashed_password"], str)
 
 def test_root_authentication():
-    url: str = "http://127.0.0.1:8000/auth/token"
+    url: str = f"{constants.Authentication.url}/auth/token"
     headers: dict = {"accept": "application/json", "Content-Type": "application/x-www-form-urlencoded"}
-    data = {
-        'grant_type': 'password',
-        'username': 'login_that_exists',
-        'password': 'test123',
-        'scope': '',
-        'client_id': 'string',
-        'client_secret': 'string',
-    }
+    data: dict = {"username": constants.Authentication.username,
+                  "password": constants.Authentication.password}
 
     response: Response = requests.post(url, headers=headers, data=data)
 

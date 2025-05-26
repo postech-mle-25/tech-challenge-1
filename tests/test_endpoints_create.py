@@ -1,10 +1,11 @@
 import requests
 from requests import Response
 import pytest
+from tests import constants
 
 @pytest.fixture(scope="module")
 def token():
-    url: str = "http://127.0.0.1:8000/auth/token"
+    url: str = f"{constants.Authentication.url}/auth/token"
     headers: dict = {"accept": "application/json", "Content-Type": "application/x-www-form-urlencoded"}
     data = {
         'username': 'login_that_exists',
@@ -17,7 +18,7 @@ def token():
     return response.json()["access_token"]
 
 def base_endpoint_create_test(token, endpoint: str, data: dict):
-    url: str = f"http://127.0.0.1:8000/api/{endpoint}/criar/"
+    url: str = f"{constants.Authentication.url}/api/{endpoint}/criar/"
     headers: dict = {
         "accept": "application/json",
         "Content-Type": "application/json",
@@ -29,9 +30,9 @@ def base_endpoint_create_test(token, endpoint: str, data: dict):
     assert 'id' in response.json().keys()
     assert isinstance(response.json()["id"], int)
 
-#def test_csv_ingestion_into_db():
-#    response = requests.post("http://127.0.0.1:8000/api/ingest")
-#    assert response.status_code == 200
+def test_csv_ingestion_into_db():
+   response = requests.post(f"{constants.Authentication.url}/api/ingest")
+   assert response.status_code == 200
 
 def test_create_processamento(token):
     data: dict = {
@@ -80,23 +81,14 @@ def test_create_importacao(token):
 
     base_endpoint_create_test(token, "importacao", data)
 
-# def test_create_exportacao(token):
-#     url: str = "http://127.0.0.1:8000/api/exportacao/criar/"
-#     headers: dict = {
-#         "accept": "application/json",
-#         "Content-Type": "application/json",
-#         "Authorization": f"Bearer {token}"
-#         }
-#     data: dict = {
-#         "control": "VINHO DE MESA",
-#         "produto": "VINHO DE MESA",
-#         "arquivo": "Producao.csv",
-#         "pasta": "producao",
-#         "ano": 1977,
-#         "quantidade": 1,
-#     }
+def test_create_exportacao(token):
+    data: dict = {
+        "pais": "Alemanha",
+        "arquivo": "ExpVinho.csv",
+        "pasta": "exportacao",
+        "ano": 1977,
+        "quantidade": 1,
+        "valor": 300
+    }
 
-#     response: Response = requests.post(url, headers=headers, json=data)
-#     assert response.status_code == 200
-#     assert 'id' in response.json().keys()
-#     assert isinstance(response.json()["id"], int)
+    base_endpoint_create_test(token, "exportacao", data)
