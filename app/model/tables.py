@@ -6,7 +6,7 @@ class Exporta(SQLModel, table=True):
     pais: str = Field(index=True)
     arquivo: str
     pasta: str
-    ano: str
+    ano: int
     quantidade: int | None = Field(default=None)
     valor: int | None = Field(default=None)
 
@@ -16,7 +16,7 @@ class Importa(SQLModel, table=True):
     pais: str = Field(index=True)
     arquivo: str
     pasta: str
-    ano: str
+    ano: int
     quantidade: int | None = Field(default=None)
     valor: int | None = Field(default=None)
 

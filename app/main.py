@@ -22,7 +22,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 SessionDep = Annotated[Session, Depends(get_session)]
 app.include_router(ingestion_router, prefix = '/api')
-app.include_router(processamento.router)
+app.include_router(processamento.router, prefix = '/api')
 app.include_router(auth.router)
 
 app.include_router(comercio.router, prefix='/api')
@@ -31,7 +31,7 @@ app.include_router(importacao.router, prefix='/api')
 app.include_router(producao.router, prefix='/api')
 
 @app.get("/")
-async def root(user: user_dependency, db: db_dependency):
+async def root(user: user_dependency):
     if user is None:
         raise HTTPException(status_code=401, detail="Not authenticated")
     return {"User": user}

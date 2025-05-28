@@ -16,7 +16,6 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-
 @router.post("/criar/")
 def create(exporta: Exporta, session: Session = Depends(get_session)):
     return BaseRouters.create(exporta, Exporta, session)
@@ -25,14 +24,14 @@ def create(exporta: Exporta, session: Session = Depends(get_session)):
 def update(exporta: Exporta, session=Depends(get_session)) -> Exporta:
     return BaseRouters.update(exporta, Exporta, session)
 
-@router.get("/obter/{item_id}")
+@router.get("/obter/")
 def get(item_id: int, session=Depends(get_session)) -> Exporta:
     return BaseRouters.get(item_id, Exporta, session)
 
-@router.delete("/excluir/{item_id}")
+@router.delete("/excluir/")
 def delete(item_id: int, session=Depends(get_session)):
     return BaseRouters.delete(item_id, Exporta, session)
 
-@router.get("/exporta/{ano}")
-def get_by_year(year: str, session=Depends(get_session)) -> List[Exporta]:
-    return BaseRouters.get_by_field(year, Exporta.ano, Exporta, session)
+@router.get("/exportacao_por_ano/")
+def get_by_year(ano: str, session=Depends(get_session)) -> List[Exporta]:
+    return BaseRouters.get_by_field(ano, Exporta.ano, Exporta, session)
