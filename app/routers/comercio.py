@@ -35,7 +35,7 @@ def delete_comercio(item_id: int, session=Depends(get_session)):
     return BaseRouters.delete(item_id, Comercio, session)
 
 
-@router.get("/comercio_por_ano")
+@router.get("/comercio_por_ano/")
 def get_comercio_por_ano(ano: int, session=Depends(get_session)) -> List[Comercio]:
     return BaseRouters.get_by_field(ano, Comercio.ano, Comercio, session)
 

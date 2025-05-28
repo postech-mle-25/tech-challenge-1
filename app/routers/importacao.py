@@ -25,7 +25,7 @@ def update_importa(importa: Importa, session=Depends(get_session)) -> Importa:
     return BaseRouters.update(importa, Importa, session)
 
 
-@router.get("/obter/{item_id}")
+@router.get("/obter/")
 def get_importa(item_id: int, session=Depends(get_session)) -> Importa:
     return BaseRouters.get(item_id, Importa, session)
 

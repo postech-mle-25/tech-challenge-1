@@ -18,7 +18,7 @@ def token():
     return response.json()["access_token"]
 
 def base_test_endpoints_obter(token, endpoint: str, id: int):
-    url = f"{constants.Authentication.url}/api/{endpoint}/obter/{id}"
+    url = f"{constants.Authentication.url}/api/{endpoint}/obter/?item_id={id}"
     headers = {
         "accept": "application/json",
         "Authorization": f"Bearer {token}"
@@ -30,7 +30,7 @@ def base_test_endpoints_obter(token, endpoint: str, id: int):
     assert isinstance(response.json()["id"], int)
 
 def test_endpoind_comercio_obter_item_not_found(token):
-    url = f"{constants.Authentication.url}/api/comercio/obter/{0}"
+    url = f"{constants.Authentication.url}/api/comercio/obter/?item_id=0"
     headers = {
         "accept": "application/json",
         "Authorization": f"Bearer {token}"

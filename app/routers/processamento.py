@@ -25,7 +25,7 @@ def update_proc(proc: Processamento, session=Depends(get_session)) -> Processame
     return BaseRouters.update(proc, Processamento, session)
 
 
-@router.get("/obter/{item_id}")
+@router.get("/obter/")
 def get_proc(item_id: int, session=Depends(get_session)) -> Processamento:
     return BaseRouters.get(item_id, Processamento, session)
 
