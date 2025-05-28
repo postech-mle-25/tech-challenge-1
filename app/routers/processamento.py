@@ -40,7 +40,7 @@ def get_proc_por_ano(ano: int, session=Depends(get_session)) -> List[Processamen
     return BaseRouters.get_by_field(ano, Processamento.ano, Processamento, session)
 
 
-@router.get("/proc_por_periodo/")
+@router.get("/processamento_por_periodo/")
 def get_proc_por_periodo(
     apos: int, ate: int, session=Depends(get_session)
 ) -> List[Processamento]:
