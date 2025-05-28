@@ -17,8 +17,8 @@ def token():
     assert response.status_code == 200
     return response.json()["access_token"]
 
-def base_test_endpoints_obter(token, endpoint: str, id: int):
-    url = f"{constants.Authentication.url}/api/{endpoint}/obter/{id}"
+def base_test_endpoints_por_ano(token, endpoint: str, ano: int):
+    url = f"{constants.Authentication.url}/api/{endpoint}/{endpoint}_por_ano?ano={ano}"
     headers = {
         "accept": "application/json",
         "Authorization": f"Bearer {token}"
@@ -26,31 +26,34 @@ def base_test_endpoints_obter(token, endpoint: str, id: int):
 
     response = requests.get(url, headers=headers)
     assert response.status_code == 200
-    assert 'id' in response.json().keys()
-    assert isinstance(response.json()["id"], int)
+    for item in response.json():
+        assert 'id' in item.keys()
+        assert isinstance(item['id'], int)
 
-def test_endpoind_comercio_obter_item_not_found(token):
-    url = f"{constants.Authentication.url}/api/comercio/obter/{0}"
+
+def test_endpoint_get_comercio_por_ano_empty_response(token):
+    url = f"{constants.Authentication.url}/api/comercio/comercio_por_ano?ano=0"
     headers = {
         "accept": "application/json",
         "Authorization": f"Bearer {token}"
         }
 
-    response: Response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=headers)
 
-    assert response.status_code == 404
-    assert response.json()["detail"] == "Item not found"
+    assert not response.json()
+
 
 @pytest.mark.parametrize(
-        "endpoint, id", 
+        "endpoint, ano", 
         [
-            ("comercio", 1),
-            ("exportacao", 1),
-            ("importacao", 1),
-            ("producao", 1)
+            ("processamento", 1977),
+            ("comercio", 1977),
+            ("exportacao", 1977),
+            ("importacao", 1977),
+            ("producao", 1977)
         ],
-        ids=["comercio", "exportacao", "importacao", "producao"]
+        ids=["processamento", "comercio", "exportacao", "importacao", "producao"]
     )
 
-def test_endpoints_obter(token, endpoint, id):
-    base_test_endpoints_obter(token, endpoint, id)
+def test_endpoints_por_ano(token, endpoint, ano):
+    base_test_endpoints_por_ano(token, endpoint, ano)

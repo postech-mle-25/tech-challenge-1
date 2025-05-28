@@ -18,7 +18,7 @@ class BaseRouters:
 
     @staticmethod
     def delete(item_id: int, route: Type[SQLModel], session: Session):
-        return get_item(item_id, route, session)
+        return delete_item(item_id, route, session)
 
     @staticmethod
     def get_by_field(query: str, field, route: Type[SQLModel], session: Session):
