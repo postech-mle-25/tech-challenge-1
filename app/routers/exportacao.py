@@ -33,5 +33,9 @@ def delete(item_id: int, session=Depends(get_session)):
     return BaseRouters.delete(item_id, Exporta, session)
 
 @router.get("/exportacao_por_ano/")
-def get_by_year(ano: str, session=Depends(get_session)) -> List[Exporta]:
+def get_exportacao_por_ano(ano: str, session=Depends(get_session)) -> List[Exporta]:
     return BaseRouters.get_by_field(ano, Exporta.ano, Exporta, session)
+
+@router.get("/exportacao_por_tipo")
+def get_exportacao_por_tipo(tipo: str, session=Depends(get_session)) -> List[Exporta]:
+    return BaseRouters.get_by_field(tipo, Exporta.tipo, Exporta, session)

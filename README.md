@@ -28,8 +28,11 @@ No diretório raíz, /app, podemos encontrar os arquivos que fazem a orquestraç
 No subdiretório model, encontram-se as tabelas do banco de dados (tables.py) e as queries básicas utilizadas pelas rotas. Para a implementação do banco, foi utilizada a biblioteca SQLModel que, além de ser agnóstica ao banco de dados específico (contando que seja SQL), facilita a integração do FastAPI com bancos de dados SQL.
 
 Por fim, o subdiretório routers abriga as rotas relativas a cada uma das classificações disponíveis no site da Embrapa, sendo elas: Comércio, Exportação, Importação, Processamento e Produção. As rotas disponíveis são:
-- criar, atualizar, obter (por id), excluir (por id), obter (por ano) e obter (por período)  para as rotas de Processamento, Comércio e Produção
-- criar, atualizar, obter (por id), excluir (por id), obter (por ano) e obter (por tipo) para Exportação e Importação.
+- **Processamento**: criar, atualizar, obter, excluir, processamento_por_periodo, processamento_por_ano, processamento_por_tipo
+- **Comercialização**: criar, atualizar, obter, excluir, comercio_por_periodo, comercio_por_ano, comercio_por_produto
+- **Produção**: criar, atualizar, obter, excluir, producao_por_periodo, producao_por_ano, producao_por_produto
+- **Importação**: criar, atualizar, obter, excluir, importacao_por_ano, importacao_por_tipo
+- **Exportação**: criar, atualizar, obter, excluir, exportacao_por_ano, exportacao_por_tipo
 
 É importante notar que, em algumas das categorias, existem subtipos que podem ser usados para consulta e que, embora os arquivos disponibilizados pela Embrapa tenham o ano como colunas, essa informação foi modelada como um campo único no banco de dados.
 

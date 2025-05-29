@@ -38,3 +38,7 @@ def delete_importa(item_id: int, session=Depends(get_session)):
 @router.get("/importacao_por_ano")
 def get_importa_por_ano(ano: str, session=Depends(get_session)) -> List[Importa]:
     return BaseRouters.get_by_field(ano, Importa.ano, Importa, session)
+
+@router.get("/importacao_por_tipo")
+def get_importa_por_tipo(tipo: str, session=Depends(get_session)) -> List[Importa]:
+    return BaseRouters.get_by_field(tipo, Importa.tipo, Importa, session)

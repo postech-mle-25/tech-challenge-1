@@ -28,9 +28,9 @@ def read_and_transform(url, categoria):
 
     # Converte todos os nomes das colunas para minúsculo
     df.columns = df.columns.str.lower()
-
-    df['arquivo'] = categoria.split('/')[-1] + ".csv"
-    df['pasta'] = categoria.split('/')[0]
+    cat = categoria.split('/')[-1].split('_')
+    cat = cat[0] if len(cat) == 1 else "_".join(cat[1:])
+    df["tipo"] = cat
 
     # Detecta colunas de quantidade e valor
     cols_quantidade = [col for col in df.columns if col.isdigit()]
@@ -86,6 +86,11 @@ def load_all_data():
 
     for i in range(len(dfs)):
         df = dfs[i]
+
+        #remove 'tipo' se houver apenas um
+        num_tipos = len(set(df.tipo))
+        if num_tipos <=1:
+            df.drop(columns='tipo', inplace=True)
 
         # Remove coluna 'Id', se existir (ignorando capitalização)
         lower_cols = [col.lower() for col in df.columns]

@@ -3,7 +3,6 @@ from typing import List
 from app.auth import get_current_user
 from app.db import get_session
 from fastapi import APIRouter, Depends
-from app.model.base_queries import filter_by_period
 from app.model.tables import Producao
 from app.routers.base_routers import BaseRouters
 
@@ -30,11 +29,6 @@ def get_producao(item_id: int, session=Depends(get_session)) -> Producao:
     return BaseRouters.get(item_id, Producao, session)
 
 
-# @router.get("/{tipo}")
-# def get_producao_por_tipo(tipo: str, session=Depends(get_session)) -> List[Producao]:
-#     return BaseRouters.get_by_field(tipo, Producao.tipo, Producao, session)
-
-
 @router.delete("/excluir/")
 def delete_producao(item_id: int, session=Depends(get_session)):
     return BaseRouters.delete(item_id, Producao, session)
@@ -46,7 +40,9 @@ def get_producao_por_ano(ano: int, session=Depends(get_session)) -> List[Produca
 
 
 @router.get("/producao_por_periodo/")
-def get_producao_por_periodo(
-    apos: int, ate: int, session=Depends(get_session)
-) -> List[Producao]:
-    return filter_by_period(ate, apos, Producao.ano, Producao, session)
+def get_producao_por_periodo(apos: int, ate: int, session=Depends(get_session)) -> List[Producao]:
+    return BaseRouters.filter_by_period(ate, apos, Producao.ano, Producao, session)
+
+@router.get("/producao_por_produto")
+def get_producao_por_produto(produto: str, session=Depends(get_session)) -> List[Producao]:
+    return BaseRouters.get_by_field(produto, Producao.produto, Producao, session)
