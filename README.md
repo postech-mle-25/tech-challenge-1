@@ -11,7 +11,7 @@ O código do presente projeto está dividido em duas partes: ETL (tech-challenge
 A parte de ETL (extract-transform-load) representa todo o trabalho feito para extrair e limpar dados do site da Embrapa, além de sua ingestão em um banco de dados sqlite. Aqui, a ideia é que esses arquivos sejam executados periodicamente (semestralmente ou anualmente).
 
 Na parte de extração, foi usada a biblioteca BeautifulSoup para fazer a raspagem no site e encontrar os links de arquivos .csv disponíveis (scraping.py). Posteriormente, esses arquivos são transformados em um dataframe. O uso dos arquivos csv, e não da obtenção dos dados diretamente do site, foi definido por alguns motivos:
-- **Instabilidade do site da Embrapa**: O site é conhecido por apresentar instabilidades frequentes e, portanto, garantir os dados localmente garante, também, o funcionamento da API. Além disso, o constante acesso para requisição dos dados do site, especialmente se entendermos que está sendo feito por diversas pessoas, pode ser entendido como um ataque aos servidores e deve ser evitado quando possível.
+- **Instabilidade do site da Embrapa**: O site é conhecido por apresentar instabilidades frequentes e, portanto, manter os dados localmente garante, também, o funcionamento da API. Além disso, o constante acesso para requisição dos dados do site, especialmente se entendermos que está sendo feito por diversas pessoas, pode sobrecarregar os servidores e deve ser evitado quando possível.
 - **Facilidade de obtenção dos dados tabulares**: Como os dados já estão disponíveis em .csv para download no site, é preferível que sejam usados em vez da extração direta. Dessa maneira, o uso de bibliotecas como pandas para posteriormente tratar os dados é facilitado.
 - **Consistência dos dados**: como esse tipo de dado não é atualizado com frequência, podemos realizar a extração periodicamente, garantindo que não sejam feitas requisições desnecessárias.
 
@@ -39,6 +39,8 @@ Por fim, o subdiretório routers abriga as rotas relativas a cada uma das classi
 ### Diagrama
 
 ![Diagrama Tech Challenge 1](diagrama-tech-challenge1.png)
+
+Além da arquitetura, o diagrama também apresenta um possível caso de uso. Nele, um modelo de machine learning é treinado utilizando os dados fornecidos pela API bem como possivelmente agregando dados externos, como por exemplo dados de clima, para uma possível predição de quantidade de exportação.  
 
 
 ## Instalando o ambiente
