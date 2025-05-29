@@ -79,11 +79,11 @@ def load_all_data():
     dfs_finais = {pasta: pd.concat(dfs, ignore_index=True) for pasta, dfs in dfs_por_pasta.items()}
 
 
-    df_comercializacao = remover_linhas_maiusculas(dfs_finais['comercializacao'].drop(columns = 'produto'))
+    df_comercializacao = remover_linhas_maiusculas(dfs_finais['comercializacao'])#.drop(columns = 'produto'))
     df_exportacao = remover_linhas_maiusculas(dfs_finais['exportacao'])
     df_importacao = remover_linhas_maiusculas(dfs_finais['importacao'])
-    df_processamento = remover_linhas_maiusculas(dfs_finais['processamento'].drop(columns = 'cultivar'))
-    df_producao = remover_linhas_maiusculas(dfs_finais['producao'].drop(columns = 'produto'))
+    df_processamento = remover_linhas_maiusculas(dfs_finais['processamento'])#.drop(columns = 'cultivar'))
+    df_producao = remover_linhas_maiusculas(dfs_finais['producao'])#.drop(columns = 'produto'))
 
 
     dfs = [df_comercializacao, df_exportacao, df_importacao, df_processamento, df_producao]

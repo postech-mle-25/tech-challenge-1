@@ -12,6 +12,7 @@ def db_ingestion():
         print(f"{modelo}: {df.shape}")
     modelos = [Comercio, Exporta, Importa, Processamento, Producao]
 
+
     with Session(engine) as session:
         for df, Modelo in zip(dfs, modelos):
             model_name = Modelo.__name__
