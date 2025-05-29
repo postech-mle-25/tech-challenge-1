@@ -32,7 +32,7 @@ class Comercio(SQLModel, table=True):
     control: str
     produto: str = Field(index=True)
     ano: int
-    quantidade: int | None = Field(default=None)
+    quantidade: int | None = Field(default=0)
 
 
 class Processamento(SQLModel, table=True):
