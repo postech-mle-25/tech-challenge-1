@@ -5,6 +5,7 @@ from sqlmodel import Session
 
 from app.db import get_session, create_db_and_tables
 from app.routers import comercio, exportacao, importacao, producao, processamento
+from app.etl.ingestion_df import db_ingestion
 
 from app import auth
 from app.auth import db_dependency, user_dependency
@@ -15,7 +16,7 @@ from app.auth import db_dependency, user_dependency
 async def lifespan(app: FastAPI):
     # Código executado no startup
     create_db_and_tables()
-    # db_ingestion()
+    db_ingestion()
     yield
     # Código executado no shutdown (se necessário)
     print("Application is shutting down...")

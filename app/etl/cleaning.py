@@ -1,3 +1,5 @@
+import unicodedata
+
 import pandas as pd
 from collections import defaultdict
 from app.etl.scraping import obter_links_csv
@@ -76,13 +78,17 @@ def load_all_data():
     # Junta todos os arquivos de cada pasta
     dfs_finais = {pasta: pd.concat(dfs, ignore_index=True) for pasta, dfs in dfs_por_pasta.items()}
 
+
     df_comercializacao = remover_linhas_maiusculas(dfs_finais['comercializacao'].drop(columns = 'produto'))
     df_exportacao = remover_linhas_maiusculas(dfs_finais['exportacao'])
     df_importacao = remover_linhas_maiusculas(dfs_finais['importacao'])
     df_processamento = remover_linhas_maiusculas(dfs_finais['processamento'].drop(columns = 'cultivar'))
     df_producao = remover_linhas_maiusculas(dfs_finais['producao'].drop(columns = 'produto'))
 
+
     dfs = [df_comercializacao, df_exportacao, df_importacao, df_processamento, df_producao]
+
+    dfs = [df.rename(columns=lambda col: remover_acentos(col)) for df in dfs]
 
     for i in range(len(dfs)):
         df = dfs[i]
@@ -107,5 +113,13 @@ def load_all_data():
         df.reset_index(drop=True, inplace=True)
 
         # Atualiza o dataframe na lista
+
         dfs[i] = df
-    return dfs 
+    return dfs
+
+
+# Função para remover acentos
+def remover_acentos(texto):
+    if isinstance(texto, str):
+        return unicodedata.normalize('NFKD', texto).encode('ASCII', 'ignore').decode('ASCII')
+    return texto
