@@ -56,35 +56,27 @@ def test_endpoind_comercio_atualizar_item_not_found(token):
         "endpoint, data", 
         [
             ("comercio", {
-                "id": 1,
-                "control": "VINHO DE MESA",
-                "arquivo": "comercio.csv",
+                "id": 999999,
                 "pasta": "comercio",
                 "ano": 1977,
                 "quantidade": 2
             }),
             ("exportacao", {
-                "id": 1,
+                "id": 999999,
                 "pais": "Alemanha",
-                "arquivo": "ExpVinho.csv",
-                "pasta": "exportacao",
                 "ano": 1977,
                 "quantidade": 2,
                 "valor": 300
             }),
             ("importacao", {
-                "id": 1,
+                "id": 999999,
                 "pais": "Alemanha",
-                "arquivo": "ImpVinho.csv",
-                "pasta": "importacao",
                 "ano": 1977,
                 "quantidade": 2,
                 "valor": 300
             }),
             ("producao", {
-                "id": 1,
-                "control": "VINHO DE MESA",
-                "arquivo": "Producao.csv",
+                "id": 999999,
                 "pasta": "producao",
                 "ano": 1977,
                 "quantidade": 2,

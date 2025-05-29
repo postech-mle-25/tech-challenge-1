@@ -44,11 +44,11 @@ def test_endpoind_comercio_obter_item_not_found(token):
 @pytest.mark.parametrize(
         "endpoint, id", 
         [
-            ("processamento", 1),
-            ("comercio", 1),
-            ("exportacao", 1),
-            ("importacao", 1),
-            ("producao", 1)
+            ("processamento", 999999),
+            ("comercio", 999999),
+            ("exportacao", 999999),
+            ("importacao", 999999),
+            ("producao", 999999)
         ],
         ids=["processamento", "comercio", "exportacao", "importacao", "producao"]
     )

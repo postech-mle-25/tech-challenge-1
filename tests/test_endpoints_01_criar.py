@@ -30,58 +30,50 @@ def base_test_endpoints_criar(token, endpoint: str, data: dict):
     assert 'id' in response.json().keys()
     assert isinstance(response.json()["id"], int)
 
-def test_csv_ingestion_into_db():
-    response = requests.post(f"{constants.Authentication.url}/api/ingest")
-    assert response.status_code == 200
+@pytest.mark.parametrize(
+        "endpoint, data", 
+        [
+            ("processamento", {
+                "id": 999999,
+                "control": "TINTAS",
+                "cultivar": "TINTAS",
+                "tipo": "pro_americanas_hibridas",
+                "ano": 1977,
+                "quantidade": 1
+            }),
+            ("comercio", {
+                "id": 999999,
+                "control": "vm_Branco",
+                "produto": "Branco",
+                "ano": 1977,
+                "quantidade": 1
+            }),
+            ("exportacao", {
+                "id": 999999,
+                "pais": "Alemanha",
+                "tipo": "exp_espumantes",
+                "ano": 1977,
+                "quantidade": 1,
+                "valor": 300
+            }),
+            ("importacao", {
+                "id": 999999,
+                "pais": "Alemanha",
+                "tipo": "imp_espumantes",
+                "ano": 1977,
+                "quantidade": 1,
+                "valor": 300
+            }),
+            ("producao", {
+                "id": 999999,
+                "control": "vm_Tinto",
+                "produto": "Tinto",
+                "ano": 1977,
+                "quantidade": 1,
+            })
+        ],
+        ids=["processamento", "comercio", "exportacao", "importacao", "producao"]
+    )
 
-# @pytest.mark.parametrize(
-#         "endpoint, data", 
-#         [
-#             ("processamento", {
-#                 "id": 1,
-#                 "control": "TINTAS",
-#                 "arquivo": "ProcessaViniferas.csv",
-#                 "pasta": "processamento",
-#                 "ano": 1977,
-#                 "quantidade": 1
-#             }),
-#             ("comercio", {
-#                 "id": 1,
-#                 "control": "VINHO DE MESA",
-#                 "arquivo": "comercio.csv",
-#                 "pasta": "comercio",
-#                 "ano": 1977,
-#                 "quantidade": 1
-#             }),
-#             ("exportacao", {
-#                 "id": 1,
-#                 "pais": "Alemanha",
-#                 "arquivo": "ExpVinho.csv",
-#                 "pasta": "exportacao",
-#                 "ano": 1977,
-#                 "quantidade": 1,
-#                 "valor": 300
-#             }),
-#             ("importacao", {
-#                 "id": 1,
-#                 "pais": "Alemanha",
-#                 "arquivo": "ImpVinho.csv",
-#                 "pasta": "importacao",
-#                 "ano": 1977,
-#                 "quantidade": 1,
-#                 "valor": 300
-#             }),
-#             ("producao", {
-#                 "id": 1,
-#                 "control": "VINHO DE MESA",
-#                 "arquivo": "Producao.csv",
-#                 "pasta": "producao",
-#                 "ano": 1977,
-#                 "quantidade": 1,
-#             })
-#         ],
-#         ids=["processamento", "comercio", "exportacao", "importacao", "producao"]
-#     )
-
-# def test_endpoints_criar(token, endpoint, data):
-#     base_test_endpoints_criar(token, endpoint, data)
+def test_endpoints_criar(token, endpoint, data):
+    base_test_endpoints_criar(token, endpoint, data)
