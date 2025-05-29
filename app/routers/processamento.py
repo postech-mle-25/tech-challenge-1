@@ -1,7 +1,6 @@
 from typing import List
 
 from app.auth import get_current_user
-from app.model.base_queries import filter_by_period
 from app.db import get_session
 from fastapi import APIRouter, Depends
 from app.model.tables import Processamento
@@ -41,12 +40,10 @@ def get_proc_por_ano(ano: int, session=Depends(get_session)) -> List[Processamen
 
 
 @router.get("/processamento_por_periodo/")
-def get_proc_por_periodo(
-    apos: int, ate: int, session=Depends(get_session)
-) -> List[Processamento]:
-    return filter_by_period(ate, apos, Processamento.ano, Processamento, session)
+def get_proc_por_periodo(apos: int, ate: int, session=Depends(get_session)) -> List[Processamento]:
+    return BaseRouters.filter_by_period(ate, apos, Processamento.ano, Processamento, session)
 
 
-# @router.get("/{tipo}")
-# def get_proc_por_tipo(tipo: str, session=Depends(get_session)) -> List[Processamento]:
-#     return get_by_field(tipo, Processamento.tipo, Processamento, session)
+@router.get("/processamento_por_tipo/")
+def get_proc_por_tipo(tipo: str, session=Depends(get_session)) -> List[Processamento]:
+    return BaseRouters.get_by_field(tipo, Processamento.tipo, Processamento, session)

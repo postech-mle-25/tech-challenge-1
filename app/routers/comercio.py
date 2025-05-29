@@ -3,7 +3,6 @@ from typing import List
 from fastapi import APIRouter, Depends
 from app.auth import get_current_user
 from app.db import get_session
-from app.model.base_queries import *
 from app.model.tables import Comercio
 
 from app.routers.base_routers import BaseRouters
@@ -41,12 +40,10 @@ def get_comercio_por_ano(ano: int, session=Depends(get_session)) -> List[Comerci
 
 
 @router.get("/comercio_por_periodo/")
-def get_comercio_por_periodo(
-    apos: int, ate: int, session=Depends(get_session)
-) -> List[Comercio]:
-    return filter_by_period(ate, apos, Comercio.ano, Comercio, session)
+def get_comercio_por_periodo(apos: int, ate: int, session=Depends(get_session)) -> List[Comercio]:
+    return BaseRouters.filter_by_period(ate, apos, Comercio.ano, Comercio, session)
 
 
-# @router.get("/{tipo}")
-# def get_comercio_por_tipo(tipo: str, session=Depends(get_session)) -> List[Comercio]:
-#     return BaseRouters.get_by_field(tipo, Comercio.tipo, Comercio, session)
+@router.get("/comercio_por_produto/")
+def get_comercio_por_produto(produto: str, session=Depends(get_session)) -> List[Comercio]:
+    return BaseRouters.get_by_field(produto, Comercio.produto, Comercio, session)
