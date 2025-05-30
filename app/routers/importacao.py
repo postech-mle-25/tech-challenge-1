@@ -3,8 +3,8 @@ from typing import List
 from app.auth import get_current_user
 from app.db import get_session
 from fastapi import APIRouter, Depends
-from app.model.base_queries import create_item, delete_item, get_by_field, get_item, update_item
 from app.model.tables import Importa
+from app.routers.base_routers import BaseRouters
 
 
 router = APIRouter(
@@ -17,24 +17,28 @@ router = APIRouter(
 
 @router.post("/criar/")
 def create_importa(importa: Importa, session=Depends(get_session)):
-    return create_item(importa, Importa, session)
+    return BaseRouters.create(importa, Importa, session)
 
 
 @router.patch("/atualizar/")
 def update_importa(importa: Importa, session=Depends(get_session)) -> Importa:
-    return update_item(importa, Importa, session)
+    return BaseRouters.update(importa, Importa, session)
 
 
-@router.get("/obter/{item_id}")
+@router.get("/obter/")
 def get_importa(item_id: int, session=Depends(get_session)) -> Importa:
-    return get_item(item_id, Importa, session)
+    return BaseRouters.get(item_id, Importa, session)
 
 
-@router.delete("/excluir/{item_id}")
+@router.delete("/excluir/")
 def delete_importa(item_id: int, session=Depends(get_session)):
-    return delete_item(item_id, Importa, session)
+    return BaseRouters.delete(item_id, Importa, session)
 
 
-@router.get("/importas_por_ano/{ano}")
+@router.get("/importacao_por_ano")
 def get_importa_por_ano(ano: str, session=Depends(get_session)) -> List[Importa]:
-    return get_by_field(ano, Importa.ano, Importa, session)
+    return BaseRouters.get_by_field(ano, Importa.ano, Importa, session)
+
+@router.get("/importacao_por_tipo")
+def get_importa_por_tipo(tipo: str, session=Depends(get_session)) -> List[Importa]:
+    return BaseRouters.get_by_field(tipo, Importa.tipo, Importa, session)
