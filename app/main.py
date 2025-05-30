@@ -10,7 +10,7 @@ from app.routers import comercio, exportacao, importacao, producao, processament
 from app import auth
 from app.auth import db_dependency, user_dependency
 
-
+# test comment
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Código executado no startup
