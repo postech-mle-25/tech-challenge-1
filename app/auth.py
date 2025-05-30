@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 from starlette import status
 
 from app.db import get_session
-from app.model.users import User
+from app.model.tables import User
 from app import constants
 
 class CreateUserRequest(BaseModel):

@@ -8,27 +8,31 @@ from app.etl import constants
 
 def db_ingestion():
     dfs = load_all_data()
+    for df, modelo in zip(dfs, ["Comercio", "Exporta", "Importa", "Processamento", "Producao"]):
+        print(f"{modelo}: {df.shape}")
     modelos = [Comercio, Exporta, Importa, Processamento, Producao]
+
 
     with Session(engine) as session:
         for df, Modelo in zip(dfs, modelos):
-            # Limpa valores nulos do DataFrame, se necessário
+            model_name = Modelo.__name__
+            index_columns = constants.DB.INDEX_COLUMNS_MAP[model_name]
+
             df = df.where(df.notnull(), None)
 
-            for coluna in constants.DB.INDEX_COLUMNS:
+            for coluna in index_columns:
                 if coluna in df.columns:
                     df = df[df[coluna].notnull()]
                     df = df[df[coluna].astype(str).str.strip() != '']
                     df = df[df[coluna].astype(str).str.lower() != 'none']
 
-            # Transforma cada linha em um objeto da classe Modelo
-            registros = [
-                Modelo(**row)
-                for row in df.to_dict(orient="records")
-                if all(row.get(col) is not None for col in constants.DB.INDEX_COLUMNS)
-            ]
+            registros = []
+            for row in df.to_dict(orient="records"):
+                missing = [col for col in index_columns if col not in row or row[col] is None]
+                if not missing:
+                    registros.append(Modelo(**row))
 
-            # Insere no banco
+            print(f"Inserindo {len(registros)} registros na tabela {Modelo.__tablename__}")
             session.add_all(registros)
 
         session.commit()

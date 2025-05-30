@@ -1,3 +1,5 @@
+import unicodedata
+
 import pandas as pd
 from collections import defaultdict
 from scraping import obter_links_csv, CSV_CATEGORIAS
@@ -91,6 +93,10 @@ def read_and_transform(url, categoria, online=True):
     df.columns = df.columns.str.lower()
     df['arquivo'] = categoria.split('/')[-1] + ".csv"
     df['pasta'] = categoria.split('/')[0]
+
+    cat = categoria.split('/')[-1].split('_')
+    cat = cat[0] if len(cat) == 1 else "_".join(cat[1:])
+    df["tipo"] = cat
 
     # Detecta colunas de quantidade e valor
     cols_quantidade = [col for col in df.columns if col.isdigit()]
@@ -200,3 +206,55 @@ if __name__ == "__main__":
             print(df.info())
     else:
         print("[AVISO] Nenhum DataFrame foi carregado.")
+
+        df = read_and_transform(url, categoria)
+        dfs_por_pasta[pasta].append(df)
+
+    # Junta todos os arquivos de cada pasta
+    dfs_finais = {pasta: pd.concat(dfs, ignore_index=True) for pasta, dfs in dfs_por_pasta.items()}
+
+
+    df_comercializacao = remover_linhas_maiusculas(dfs_finais['comercializacao'])#.drop(columns = 'produto'))
+    df_exportacao = remover_linhas_maiusculas(dfs_finais['exportacao'])
+    df_importacao = remover_linhas_maiusculas(dfs_finais['importacao'])
+    df_processamento = remover_linhas_maiusculas(dfs_finais['processamento'])#.drop(columns = 'cultivar'))
+    df_producao = remover_linhas_maiusculas(dfs_finais['producao'])#.drop(columns = 'produto'))
+
+
+    dfs = [df_comercializacao, df_exportacao, df_importacao, df_processamento, df_producao]
+
+    dfs = [df.rename(columns=lambda col: remover_acentos(col)) for df in dfs]
+
+    for i in range(len(dfs)):
+        df = dfs[i]
+
+        #remove 'tipo' se houver apenas um
+        num_tipos = len(set(df.tipo))
+        if num_tipos <=1:
+            df.drop(columns='tipo', inplace=True)
+
+        # Remove coluna 'Id', se existir (ignorando capitalização)
+        lower_cols = [col.lower() for col in df.columns]
+        if 'id' in lower_cols:
+            df.drop(columns=[col for col in df.columns if col.lower() == 'id'][0], inplace=True)
+
+        # Remove linhas onde Quantidade e (se existir) Valor são ambos zero
+        df = df[~((df['quantidade'] == 0) & (df.get('valor', 0) == 0))]
+
+        # Remove duplicatas
+        df.drop_duplicates(inplace=True)
+
+        # Resetar índice
+        df.reset_index(drop=True, inplace=True)
+
+        # Atualiza o dataframe na lista
+
+        dfs[i] = df
+    return dfs
+
+
+# Função para remover acentos
+def remover_acentos(texto):
+    if isinstance(texto, str):
+        return unicodedata.normalize('NFKD', texto).encode('ASCII', 'ignore').decode('ASCII')
+    return texto
