@@ -1,14 +1,15 @@
-from typing import Annotated
+import asyncio
+import uvicorn
 from contextlib import asynccontextmanager
 
-from fastapi import HTTPException, Depends, FastAPI
+from fastapi import Depends, FastAPI, HTTPException
 from sqlmodel import Session
 
-from etl.ingestion_df import db_ingestion
-from app.db import get_session, create_db_and_tables
-from app.routers import comercio, exportacao, importacao, producao, processamento
 from app import auth
 from app.auth import user_dependency
+from app.db import create_db_and_tables, get_session
+from app.routers import comercio, exportacao, importacao, processamento, producao
+from etl.ingestion_df import db_ingestion
 
 
 @asynccontextmanager
@@ -33,3 +34,11 @@ app.include_router(comercio.router, prefix='/api')
 app.include_router(exportacao.router, prefix='/api')
 app.include_router(importacao.router, prefix='/api')
 app.include_router(producao.router, prefix='/api')
+
+async def main():
+    config = uvicorn.Config("main:app", port=8080, log_level="info")
+    server = uvicorn.Server(config)
+    await server.serve()
+
+if __name__ == "__main__":
+    asyncio.run(main())
