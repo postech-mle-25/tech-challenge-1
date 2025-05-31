@@ -2,7 +2,7 @@ import unicodedata
 
 import pandas as pd
 from collections import defaultdict
-from app.etl.scraping import obter_links_csv, CSV_CATEGORIAS
+from etl.scraping import obter_links_csv, CSV_CATEGORIAS
 import csv
 import requests
 import time
