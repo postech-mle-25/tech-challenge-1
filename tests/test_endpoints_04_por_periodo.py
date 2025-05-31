@@ -1,6 +1,8 @@
 import requests
-from requests import Response
+from typing import Any
+
 import pytest
+
 from tests import constants
 
 @pytest.fixture(scope="module")
@@ -12,12 +14,12 @@ def token():
         'password': constants.Authentication.password,
     }
 
-    response: Response = requests.post(url, headers=headers, data=data)
+    response = requests.post(url, headers=headers, data=data)
 
     assert response.status_code == 200
     return response.json()["access_token"]
 
-def base_test_endpoints_por_ano(token, endpoint: str, apos: int, ate: int):
+def base_test_endpoints_por_ano(token: Any, endpoint: str, apos: int, ate: int):
     url = f"{constants.Authentication.url}/api/{endpoint}/{endpoint}_por_periodo?apos={apos}&ate={ate}"
     headers = {
         "accept": "application/json",
@@ -31,7 +33,7 @@ def base_test_endpoints_por_ano(token, endpoint: str, apos: int, ate: int):
         assert isinstance(item['id'], int)
 
 
-def test_endpoint_get_comercio_por_periodo_empty_response(token):
+def test_endpoint_get_comercio_por_periodo_empty_response(token: Any):
     url = f"{constants.Authentication.url}/api/comercio/comercio_por_periodo?apos=-1&ate=0"
     headers = {
         "accept": "application/json",
@@ -53,5 +55,5 @@ def test_endpoint_get_comercio_por_periodo_empty_response(token):
         ids=["processamento", "comercio", "producao"]
     )
 
-def test_endpoints_por_ano(token, endpoint, apos, ate):
+def test_endpoints_por_ano(token: Any, endpoint: str, apos: int, ate: int):
     base_test_endpoints_por_ano(token, endpoint, apos, ate)

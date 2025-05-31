@@ -1,8 +1,10 @@
-from typing import List
+from typing import List, Type
+
+from sqlmodel import SQLModel
+from fastapi import APIRouter, Depends
 
 from app.auth import get_current_user
 from app.db import get_session
-from fastapi import APIRouter, Depends
 from app.model.tables import Importa
 from app.routers.base_routers import BaseRouters
 
@@ -14,26 +16,21 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-
 @router.post("/criar/")
-def create_importa(importa: Importa, session=Depends(get_session)):
+def create_importa(importa: Importa, session=Depends(get_session)) -> dict:
     return BaseRouters.create(importa, Importa, session)
-
 
 @router.patch("/atualizar/")
 def update_importa(importa: Importa, session=Depends(get_session)) -> Importa:
     return BaseRouters.update(importa, Importa, session)
 
-
 @router.get("/obter/")
-def get_importa(item_id: int, session=Depends(get_session)) -> Importa:
+def get_importa(item_id: int, session=Depends(get_session)) -> Type[SQLModel]:
     return BaseRouters.get(item_id, Importa, session)
 
-
 @router.delete("/excluir/")
-def delete_importa(item_id: int, session=Depends(get_session)):
+def delete_importa(item_id: int, session=Depends(get_session)) -> dict:
     return BaseRouters.delete(item_id, Importa, session)
-
 
 @router.get("/importacao_por_ano")
 def get_importa_por_ano(ano: str, session=Depends(get_session)) -> List[Importa]:

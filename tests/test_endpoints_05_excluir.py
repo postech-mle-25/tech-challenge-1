@@ -1,7 +1,10 @@
 import requests
-from requests import Response
+from typing import Any
+
 import pytest
+
 from tests import constants
+
 
 @pytest.fixture(scope="module")
 def token():
@@ -12,13 +15,13 @@ def token():
         'password': constants.Authentication.password,
     }
 
-    response: Response = requests.post(url, headers=headers, data=data)
+    response = requests.post(url, headers=headers, data=data)
 
     assert response.status_code == 200
     return response.json()["access_token"]
 
-def base_test_endpoints_excluir(token, endpoint: str, id: int):
-    url = f"{constants.Authentication.url}/api/{endpoint}/excluir/?item_id={id}"
+def base_test_endpoints_excluir(token: Any, endpoint: str, item_id: int):
+    url = f"{constants.Authentication.url}/api/{endpoint}/excluir/?item_id={item_id}"
     headers = {
         "accept": "application/json",
         "Authorization": f"Bearer {token}"
@@ -36,7 +39,7 @@ def test_endpoind_comercio_excluir_item_not_found(token):
         "Authorization": f"Bearer {token}"
         }
 
-    response: Response = requests.delete(url, headers=headers)
+    response = requests.delete(url, headers=headers)
 
     assert response.status_code == 404
     assert response.json()["detail"] == "Item not found"
@@ -53,5 +56,5 @@ def test_endpoind_comercio_excluir_item_not_found(token):
         ids=["processamento", "comercio", "exportacao", "importacao", "producao"]
     )
 
-def test_endpoints_excluir(token, endpoint, id):
-    base_test_endpoints_excluir(token, endpoint, id)
+def test_endpoints_excluir(token: Any, endpoint: str, item_id: int):
+    base_test_endpoints_excluir(token, endpoint, item_id)

@@ -1,7 +1,10 @@
 import requests
-from requests import Response
+from typing import Any
+
 import pytest
+
 from tests import constants
+
 
 @pytest.fixture(scope="module")
 def token():
@@ -12,12 +15,12 @@ def token():
         'password': constants.Authentication.password,
     }
 
-    response: Response = requests.post(url, headers=headers, data=data)
+    response = requests.post(url, headers=headers, data=data)
 
     assert response.status_code == 200
     return response.json()["access_token"]
 
-def base_test_endpoints_atualizar(token, endpoint: str, data: dict):
+def base_test_endpoints_atualizar(token: Any, endpoint: str, data: dict):
     url = f"{constants.Authentication.url}/api/{endpoint}/atualizar/"
     headers = {
         "accept": "application/json",
@@ -25,12 +28,13 @@ def base_test_endpoints_atualizar(token, endpoint: str, data: dict):
         "Authorization": f"Bearer {token}"
         }
 
-    response: Response = requests.patch(url, headers=headers, json=data)
+    response = requests.patch(url, headers=headers, json=data)
     assert response.status_code == 200
     assert 'id' in response.json().keys()
     assert isinstance(response.json()["id"], int)
 
-def test_endpoind_comercio_atualizar_item_not_found(token):
+
+def test_endpoind_comercio_atualizar_item_not_found(token: Any):
     url = f"{constants.Authentication.url}/api/comercio/atualizar/"
     headers = {
         "accept": "application/json",
@@ -85,5 +89,5 @@ def test_endpoind_comercio_atualizar_item_not_found(token):
         ids=["comercio", "exportacao", "importacao", "producao"]
     )
 
-def test_endpoints_atualizar(token, endpoint, data):
+def test_endpoints_atualizar(token: Any, endpoint: str, data: dict):
     base_test_endpoints_atualizar(token, endpoint, data)

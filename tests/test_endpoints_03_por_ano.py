@@ -1,23 +1,26 @@
 import requests
-from requests import Response
+from typing import Any
+
 import pytest
+
 from tests import constants
+
 
 @pytest.fixture(scope="module")
 def token():
-    url: str = f"{constants.Authentication.url}/auth/token"
-    headers: dict = {"accept": "application/json", "Content-Type": "application/x-www-form-urlencoded"}
+    url = f"{constants.Authentication.url}/auth/token"
+    headers = {"accept": "application/json", "Content-Type": "application/x-www-form-urlencoded"}
     data = {
         'username': constants.Authentication.username,
         'password': constants.Authentication.password,
     }
 
-    response: Response = requests.post(url, headers=headers, data=data)
+    response = requests.post(url, headers=headers, data=data)
 
     assert response.status_code == 200
     return response.json()["access_token"]
 
-def base_test_endpoints_por_ano(token, endpoint: str, ano: int):
+def base_test_endpoints_por_ano(token: Any, endpoint: str, ano: int):
     url = f"{constants.Authentication.url}/api/{endpoint}/{endpoint}_por_ano?ano={ano}"
     headers = {
         "accept": "application/json",
@@ -30,8 +33,7 @@ def base_test_endpoints_por_ano(token, endpoint: str, ano: int):
         assert 'id' in item.keys()
         assert isinstance(item['id'], int)
 
-
-def test_endpoint_get_comercio_por_ano_empty_response(token):
+def test_endpoint_get_comercio_por_ano_empty_response(token: Any):
     url = f"{constants.Authentication.url}/api/comercio/comercio_por_ano?ano=0"
     headers = {
         "accept": "application/json",
@@ -55,5 +57,5 @@ def test_endpoint_get_comercio_por_ano_empty_response(token):
         ids=["processamento", "comercio", "exportacao", "importacao", "producao"]
     )
 
-def test_endpoints_por_ano(token, endpoint, ano):
+def test_endpoints_por_ano(token: Any, endpoint: str, ano: int):
     base_test_endpoints_por_ano(token, endpoint, ano)
