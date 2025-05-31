@@ -1,8 +1,8 @@
-from app.etl.cleaning import load_all_data
+from etl.cleaning import load_all_data
 from app.db import engine, get_session
 from app.model.tables import Exporta, Importa, Producao, Comercio, Processamento
 from sqlmodel import Session
-from app.etl import constants
+from etl import constants
 
 #TODO: remover imports desnecessários
 

@@ -5,7 +5,7 @@ O objetivo deste projeto é fornecer uma API que facilite o acesso aos dados dis
 
 ## Arquitetura
 
-O código do presente projeto está dividido em duas partes: ETL (tech-challenge-1/etl) e API (tech-challenge-1/app). Ambas são descritas, em detalhes, abaixo e representadas visualmente no diagrama a seguir.
+O código do presente projeto está dividido em duas partes: ETL (tech-challenge-1/app/etl) e API (tech-challenge-1/app). Ambas são descritas, em detalhes, abaixo e representadas visualmente no diagrama a seguir.
 
 ### ETL
 A parte de ETL (extract-transform-load) representa todo o trabalho feito para extrair e limpar dados do site da Embrapa, além de sua ingestão em um banco de dados sqlite. Aqui, a ideia é que esses arquivos sejam executados periodicamente (semestralmente ou anualmente).

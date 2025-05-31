@@ -1,3 +1,6 @@
+import asyncio
+import uvicorn
+
 from fastapi import HTTPException, Depends, FastAPI
 from typing import Annotated
 from contextlib import asynccontextmanager
@@ -5,7 +8,7 @@ from sqlmodel import Session
 
 from app.db import get_session, create_db_and_tables
 from app.routers import comercio, exportacao, importacao, producao, processamento
-from app.etl.ingestion_df import db_ingestion
+from etl.ingestion_df import db_ingestion
 
 from app import auth
 from app.auth import db_dependency, user_dependency
@@ -36,3 +39,13 @@ async def root(user: user_dependency):
     if user is None:
         raise HTTPException(status_code=401, detail="Not authenticated")
     return {"User": user}
+
+
+#run server programmatically
+async def main():
+    config = uvicorn.Config("main:app", port=8080, log_level="info")
+    server = uvicorn.Server(config)
+    await server.serve()
+
+if __name__ == "__main__":
+    asyncio.run(main())
