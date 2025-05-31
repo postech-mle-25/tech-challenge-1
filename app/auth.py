@@ -13,6 +13,7 @@ from app.db import get_session
 from app.model.tables import User
 from app import constants
 
+
 class CreateUserRequest(BaseModel):
     username: str
     password: str

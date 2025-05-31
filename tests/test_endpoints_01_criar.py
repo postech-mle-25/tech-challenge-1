@@ -1,7 +1,10 @@
 import requests
-from requests import Response
+from typing import Any
+
 import pytest
+
 from tests import constants
+
 
 @pytest.fixture(scope="module")
 def token():
@@ -17,7 +20,7 @@ def token():
     assert response.status_code == 200
     return response.json()["access_token"]
 
-def base_test_endpoints_criar(token, endpoint: str, data: dict):
+def base_test_endpoints_criar(token: Any, endpoint: str, data: dict):
     url = f"{constants.Authentication.url}/api/{endpoint}/criar/"
     headers = {
         "accept": "application/json",
@@ -75,5 +78,5 @@ def base_test_endpoints_criar(token, endpoint: str, data: dict):
         ids=["processamento", "comercio", "exportacao", "importacao", "producao"]
     )
 
-def test_endpoints_criar(token, endpoint, data):
+def test_endpoints_criar(token: Any, endpoint: str, data: dict):
     base_test_endpoints_criar(token, endpoint, data)

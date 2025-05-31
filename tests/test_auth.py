@@ -1,5 +1,6 @@
 import requests
 from requests import Response
+
 from tests import constants
 
 def test_root_unauthenticated():
@@ -7,9 +8,9 @@ def test_root_unauthenticated():
     assert response.status_code == 401
 
 def test_create_new_generic_user():
-    url: str = f"{constants.Authentication.url}/auth"
-    headers: dict = {"accept": "application/json", "Content-Type": "application/json"}
-    data: dict = {"username": constants.Authentication.username,
+    url = f"{constants.Authentication.url}/auth"
+    headers = {"accept": "application/json", "Content-Type": "application/json"}
+    data = {"username": constants.Authentication.username,
                   "password": constants.Authentication.password}
 
     response: Response = requests.post(url, headers=headers, json=data)
@@ -26,9 +27,9 @@ def test_create_new_generic_user():
     assert isinstance(response_json["hashed_password"], str)
 
 def test_root_authentication():
-    url: str = f"{constants.Authentication.url}/auth/token"
-    headers: dict = {"accept": "application/json", "Content-Type": "application/x-www-form-urlencoded"}
-    data: dict = {"username": constants.Authentication.username,
+    url = f"{constants.Authentication.url}/auth/token"
+    headers = {"accept": "application/json", "Content-Type": "application/x-www-form-urlencoded"}
+    data = {"username": constants.Authentication.username,
                   "password": constants.Authentication.password}
 
     response: Response = requests.post(url, headers=headers, data=data)
