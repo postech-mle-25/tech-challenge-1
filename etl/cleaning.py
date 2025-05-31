@@ -113,6 +113,9 @@ def read_and_transform(url, categoria, online=True):
     if df_long.empty:
         raise ValueError(f"Transformação resultou em DataFrame vazio para {categoria} (url: {url})")
 
+    if 'ano' in df_long.columns:
+        df_long['ano'] = pd.to_numeric(df_long['ano'], errors='coerce').astype('Int64')
+
     return df_long.reset_index(drop=True)
 
 def remover_linhas_maiusculas(df):

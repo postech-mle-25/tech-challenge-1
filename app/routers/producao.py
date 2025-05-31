@@ -25,7 +25,7 @@ def update_producao(producao: Producao, session=Depends(get_session)) -> Produca
     return BaseRouters.update(producao, Producao, session)
 
 @router.get("/obter/")
-def get_producao(item_id: int, session=Depends(get_session)) -> Type[SQLModel]:
+def get_producao(item_id: int, session=Depends(get_session)) -> Producao:
     return BaseRouters.get(item_id, Producao, session)
 
 @router.delete("/excluir/")

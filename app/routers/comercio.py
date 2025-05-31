@@ -24,7 +24,7 @@ def update_comercio(comercio: Comercio, session=Depends(get_session)) -> Comerci
     return BaseRouters.update(comercio, Comercio, session)
 
 @router.get("/obter/")
-def get_comercio(item_id: int, session=Depends(get_session)) -> type[SQLModel]:
+def get_comercio(item_id: int, session=Depends(get_session)) -> Comercio:
     return BaseRouters.get(item_id, Comercio, session)
 
 @router.delete("/excluir/")
