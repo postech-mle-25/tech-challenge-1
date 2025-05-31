@@ -8,7 +8,7 @@ import csv
 # --- Configurações ---
 BASE_URL = "http://vitibrasil.cnpuv.embrapa.br/"
 HEADERS = {"User-Agent": "Mozilla/5.0"}
-MAX_TENTATIVAS = 10
+MAX_TENTATIVAS = 2
 ESPERA_SEGUNDOS = 3
 
 # --- Mapeamento de categorias ---
