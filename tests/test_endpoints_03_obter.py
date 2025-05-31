@@ -54,7 +54,6 @@ def test_endpoind_comercio_obter_item_not_found(token: Any):
             ("producao", 999999)
         ],
         ids=["processamento", "comercio", "exportacao", "importacao", "producao"]
-    )
-
-def test_endpoints_obter(token, endpoint, item_id):
+)
+def test_endpoints_obter(token: Any, endpoint: str, item_id: int):
     base_test_endpoints_obter(token, endpoint, item_id)

@@ -26,7 +26,7 @@ def update(exporta: Exporta, session=Depends(get_session)) -> Exporta:
     return BaseRouters.update(exporta, Exporta, session)
 
 @router.get("/obter/")
-def get(item_id: int, session=Depends(get_session)) -> Type[SQLModel]:
+def get(item_id: int, session=Depends(get_session)) -> Exporta:
     return BaseRouters.get(item_id, Exporta, session)
 
 @router.delete("/excluir/")

@@ -18,6 +18,8 @@ def db_ingestion():
             model_name = Modelo.__name__
             index_columns = constants.DB.INDEX_COLUMNS_MAP[model_name]
 
+            print(f"Colunas da tabela {model_name}: {[col.name for col in Modelo.__table__.columns]}")
+
             df = df.where(df.notnull(), None)
 
             for coluna in index_columns:

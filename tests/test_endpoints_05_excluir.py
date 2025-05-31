@@ -45,7 +45,7 @@ def test_endpoind_comercio_excluir_item_not_found(token):
     assert response.json()["detail"] == "Item not found"
 
 @pytest.mark.parametrize(
-        "endpoint, id", 
+        "endpoint, item_id",
         [
             ("processamento", 999999),
             ("comercio", 999999),

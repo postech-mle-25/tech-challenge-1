@@ -1,13 +1,15 @@
-from typing import Type, Any
+from typing import Type, TypeVar, Any
 
 from fastapi import HTTPException
 from sqlmodel import select
 from sqlmodel import SQLModel, Session
 
+T = TypeVar("T", bound=SQLModel)
+
 class BaseQuery:
 
     @staticmethod
-    def get_item(item_id: int, table: Type[SQLModel], session: Session) -> Type[SQLModel]:
+    def get_item(item_id: int, table: Type[T], session: Session) -> T:
         item = session.get(table, item_id)
         if not item:
             raise HTTPException(status_code=404, detail="Item not found")

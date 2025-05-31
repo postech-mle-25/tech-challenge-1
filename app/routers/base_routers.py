@@ -11,7 +11,7 @@ class BaseRouters:
         return BaseQuery.create_item(model, route, session)
 
     @staticmethod
-    def get(item_id: int, route: Type[SQLModel], session: Session) -> Type[SQLModel]:
+    def get(item_id: int, route: Type[SQLModel], session: Session):
         return BaseQuery.get_item(item_id, route, session)
 
     @staticmethod
