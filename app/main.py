@@ -1,5 +1,3 @@
-import asyncio
-import uvicorn
 from contextlib import asynccontextmanager
 from typing import Annotated
 
@@ -30,16 +28,8 @@ async def root(user: user_dependency):
     return {"User": user}
 
 app.include_router(auth.router)
-app.include_router(processamento.router, prefix = '/api')
-app.include_router(comercio.router, prefix='/api')
-app.include_router(exportacao.router, prefix='/api')
-app.include_router(importacao.router, prefix='/api')
-app.include_router(producao.router, prefix='/api')
-
-async def main():
-    config = uvicorn.Config("main:app", port=8080, log_level="info")
-    server = uvicorn.Server(config)
-    await server.serve()
-
-if __name__ == "__main__":
-    asyncio.run(main())
+app.include_router(processamento.router, prefix="/api")
+app.include_router(comercio.router, prefix="/api")
+app.include_router(exportacao.router, prefix="/api")
+app.include_router(importacao.router, prefix="/api")
+app.include_router(producao.router, prefix="/api")
